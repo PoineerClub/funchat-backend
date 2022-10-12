@@ -1,16 +1,20 @@
-import { Request, Response } from "express"
-import express from 'express'
-import { PORT } from "./config"
+import express from 'express';
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { PORT } from './config';
+
 
 const app = express()
+const httpServer = createServer(app);
 
+const io = new Server(httpServer, { /* options */ });
 
-app.get('/', (req :Request, res:Response)=> {
-  res.status(200).send({
-      'messagae':'hello world'
-  })
-})
+io.on("connection", (socket) => {
+  console.log(socket);
+  
+});
+console.log(io);
 
-app.listen(PORT, () => {
-   console.log(`server is up and running on port : ${PORT}`);
-})
+httpServer.listen(PORT, () => {
+  console.log(`Http server is runnning on port : ${PORT}`);
+});
